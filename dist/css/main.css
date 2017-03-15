@@ -1,0 +1,7 @@
+.image-container img {
+  display: block;
+  margin: auto;
+  background: #000;
+  width: 800px;
+  height: 600px;
+}
