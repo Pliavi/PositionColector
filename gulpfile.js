@@ -30,7 +30,7 @@ gulp.task('compress', function (cb) {
   pump([
         gulp.src('js/**/*.js'),
         browserify({ insertGlobals : true }),
-        babel( {presets:['es2015']} ),
+        babel({ presets:['es2015'] }),
         uglify(),
         gulp.dest('dist/js')
     ],
