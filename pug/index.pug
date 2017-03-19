@@ -1,11 +1,13 @@
+doctype html
 head
   link(rel='stylesheet' href='css/main.css')
 
 header Coletor de Posições
 
-button.position-button
-
-section.image-container
-  img(src='#placeholder')
+section.container#drag-bound
+  #head.draggable
+    span.description Cabeça
 
 footer Tente posicionar o ponto o mais próximo do centro da parte do corpo selecionada.
+
+script(src='js/index.js')

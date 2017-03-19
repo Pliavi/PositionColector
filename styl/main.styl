@@ -1,6 +1,36 @@
-.image-container img
+header
+  text-align center
+  text-transform: uppercase
+  font-size: 40px
+
+.container
   display block
-  margin auto
   background black
   width 800px
   height 600px
+  position relative
+  left calc(50% - 400px)
+
+.draggable
+  width 1px
+  height 1px
+
+.draggable::after
+  display block
+  position relative
+  width 31px
+  height 31px
+  top -33px
+  left -15px
+  content ''
+  background-image url('../img/aim.png')
+
+span.description
+  position relative
+  top -15px
+  left 10px
+  color red
+  text-transform lowercase
+
+footer
+  text-align: center

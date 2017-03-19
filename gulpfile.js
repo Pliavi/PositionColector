@@ -1,7 +1,9 @@
 var gulp = require('gulp');
 var uglify = require('gulp-uglify');
+var babel = require('gulp-babel');
 var styl = require('gulp-stylus');
 var pug = require('gulp-pug');
+var browserify = require('gulp-browserify');
 var pump = require('pump');
 
 gulp.task('styl', function (cb) {
@@ -27,6 +29,8 @@ gulp.task('pug', function (cb) {
 gulp.task('compress', function (cb) {
   pump([
         gulp.src('js/**/*.js'),
+        browserify({ insertGlobals : true }),
+        babel( {presets:['es2015']} ),
         uglify(),
         gulp.dest('dist/js')
     ],
