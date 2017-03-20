@@ -1,3 +1,4 @@
+/* eslint-disable */
 var gulp = require('gulp');
 var uglify = require('gulp-uglify');
 var babel = require('gulp-babel');
@@ -29,8 +30,8 @@ gulp.task('pug', function (cb) {
 gulp.task('compress', function (cb) {
   pump([
         gulp.src('js/**/*.js'),
-        browserify({ insertGlobals : true }),
         babel({ presets:['es2015'] }),
+        browserify({ insertGlobals : true }),
         uglify(),
         gulp.dest('dist/js')
     ],
