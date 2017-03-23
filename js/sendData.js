@@ -1,11 +1,13 @@
 let axios = require('axios');
 
-
 function sendData(volunteer, positions, folder){
     axios.post('/savePosition', {
-        volunteer: this.volunteer,
-        positions: this.positions,
-        folder: this.folder
+        data:{
+            volunteer: this.volunteer,
+            folder: this.folder,
+            positions: this.positions,
+            index: this.index,
+        }
     })
     .then(function (response) {
         console.log("enviado!");
