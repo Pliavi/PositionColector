@@ -17,19 +17,22 @@ class Position extends Mysqli {
         $this->index        = $data['index'];
         $this->data['date'] = date('Y-m-d');
 
+        if(!is_dir("../{$this->json_folder}/{$this->folder}")){
+            mkdir("../{$this->json_folder}/{$this->folder}", 0777, true);
+        }
         # Tenta salvar os dados, caso dê errado remove-se o arquivo criado (caso tenha sido criado)
         if($file_name = $this->saveToFolder()){
             if(!$this->saveToDatabase()) {
-                $this->removeFromFolder($file_name);
+                // $this->removeFromFolder($file_name);
                 $this->sendMessage(Config::DEFAULT_ERROR_MESSAGE . 'Falha no envio', 500);
             }
         } else {
-            $this->removeFromFolder($file_name);
+            // $this->removeFromFolder($file_name);
             $this->sendMessage(Config::DEFAULT_ERROR_MESSAGE . 'Falha na criação do arquivo', 500);
         }
     }
 
-    public function removeFromFolder($filename){
+    public function removeFromFolder($file_name){
         if (file_exists($file_name)) unlink($file_name);
     }
 
