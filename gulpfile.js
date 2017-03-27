@@ -39,15 +39,14 @@ gulp.task('compress', function (cb) {
   );
 });
 
-gulp.task('copy', function (cb) {
-  pump([
-        gulp.src('img/**/*'),
-        gulp.dest('dist/img')
-    ],
-    cb
-  );
+gulp.task('img', function (cb) {
+  pump([ gulp.src('img/**/*'), gulp.dest('dist/img') ], cb );
 });
 
-gulp.task('all', ['compress', 'styl', 'pug', 'copy'])
-gulp.task('watch', () => gulp.watch(['pug/*.pug','js/*.js','styl/*.styl'], ['all']))
+gulp.task('php', function (cb) {
+  pump([ gulp.src('php/**/*'), gulp.dest('dist/php') ], cb );
+});
+
+gulp.task('all', ['compress', 'styl', 'pug', 'img', 'php'])
+gulp.task('watch', () => gulp.watch(['pug/*.pug','js/*.js','styl/*.styl', 'php/*.php'], ['all']))
 gulp.task('default', ['watch'])

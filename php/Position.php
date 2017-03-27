@@ -8,7 +8,8 @@ class Position extends Mysqli {
     private $index;
 
     public function __construct($data) {
-        parent::__construct(list($host, $user, $pass, $base) = Config::DB_LIST);
+        list($base, $pass, $user, $host ) = Config::DB_LIST;
+        parent::__construct($host, $user, $pass, $base);
         if (mysqli_connect_error()) die(Config::DEFAULT_ERROR_MESSAGE . "Conexão");
 
         $this->data         = $data;
@@ -16,25 +17,39 @@ class Position extends Mysqli {
         $this->index        = $data['index'];
         $this->data['date'] = date('Y-m-d');
 
+        if(!is_dir("../{$this->json_folder}/{$this->folder}")){
+            mkdir("../{$this->json_folder}/{$this->folder}", 0777, true);
+        }
         # Tenta salvar os dados, caso dê errado remove-se o arquivo criado (caso tenha sido criado)
-        if($file_name = saveToFolder()){
-            if(!saveToDatabase()) {
-                removeFromFolder($file_name);
-                $this->redirectBack(Config::DEFAULT_ERROR_MESSAGE . 'Falha no envio');
+        if($file_name = $this->saveToFolder()){
+            if(!$this->saveToDatabase()) {
+                // $this->removeFromFolder($file_name);
+                $this->sendMessage(Config::DEFAULT_ERROR_MESSAGE . 'Falha no envio', 500);
             }
         } else {
-            removeFromFolder($file_name);
-            $this->redirectBack(Config::DEFAULT_ERROR_MESSAGE . 'Falha na criação do arquivo');
+            // $this->removeFromFolder($file_name);
+            $this->sendMessage(Config::DEFAULT_ERROR_MESSAGE . 'Falha na criação do arquivo', 500);
         }
+    }
+
+    public function removeFromFolder($file_name){
+        if (file_exists($file_name)) unlink($file_name);
+    }
+
+    public function sendMessage($message, $code){
+        echo $message;
+        http_response_code($code);
     }
 
     # Altera o estado de pronto da imagem no banco, para mostrar as imagens já alteradas e as faltantes
     public function saveToDatabase() {
-        if($query = $this->prepare("UPDATE Images SET done = true WHERE folder = ? and index = ?"))
-            if($query->bind_param('i', $this->folder, $this->index))
-                if($query->execute())
+        if($query = $this->prepare("UPDATE Images SET done = true WHERE folder = ? and index = ?")){
+            if($query->bind_param('i', $this->folder, $this->index)){
+                if($query->execute()){
                     return true;
-
+                }
+            }
+        }
         return false;
     }
 
@@ -42,15 +57,16 @@ class Position extends Mysqli {
     public function saveToFolder($tries = 0) {
         if($tries >= 5) return false;
 
-        $file_name = $_SERVER['DOCUMENT_ROOT'] . "/{$this->json_folder}/{$this->folder}/{$this->index}.json";
+        $file_name = "../{$this->json_folder}/{$this->folder}/{$this->index}.json";
+        $this->removeFromFolder($file_name);
 
-        if (file_exists($file_name)) unlink($file_name);
-
-        if($position_metadata = fopen($file_name, "w"))
-            if(fwrite($position_metadata, json_encode($this->data)))
-                if(fclose($position_metadata))
-                    return $file_name;
+        $position_metadata = fopen($file_name, 'w');
+        if(fwrite($position_metadata, json_encode($this->data))){
+            if(fclose($position_metadata)){
+                return $file_name;
+            }
+        }
         
-        return saveToFolder(++$tries);
+        return $this->saveToFolder(++$tries);
     }
 }
