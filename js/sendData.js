@@ -1,18 +1,16 @@
 let axios = require('axios')
 
-function sendData(volunteer, positions, folder) { // eslint-disable-line
-  axios.post('/savePosition', {
-    data: {
-      volunteer: this.volunteer,
-      folder: this.folder,
-      positions: this.positions,
-      index: this.index,
-    }
+function sendData(positions) { // eslint-disable-line
+  var pos = positions
+  axios.post('php/savePosition.php', {
+      positions: pos
   })
-  .then(function () {
-    console.log('enviado!')
+  .then(function (response) {
+    console.log(response.data)
   })
   .catch(function (error) {
     console.log(error)
   })
 }
+
+sendData({'lhand': [256,128]});

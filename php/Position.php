@@ -1,33 +1,38 @@
 <?php
 class Position extends Mysqli {
 
-    protected $json_folder = 'result';
+    protected $json_folder = 'results';
     protected $images_folder = 'images';
     private $data;
     private $folder;
     private $index;
+    private $date;
+    private $volunteer;
 
     public function __construct($data) {
+        session_start();
+        $_SESSION['id'] = 1;
+
         list($base, $pass, $user, $host ) = Config::DB_LIST;
         parent::__construct($host, $user, $pass, $base);
         if (mysqli_connect_error()) die(Config::DEFAULT_ERROR_MESSAGE . "Conexão");
 
-        $this->data         = $data;
-        $this->folder       = $data['folder'];
-        $this->index        = $data['index'];
-        $this->data['date'] = date('Y-m-d');
+        $this->data          = $data;
+        $this->folder        = $data['folder'];
+        $this->index         = $_SESSION['id'];
+        $this->data['index'] = $this->index;
+        $this->data['date']  = date('Y-m-d');
+        $this->date          = $this->data['date'];
+        $this->volunteer     = $this->data['volunteer'];;
 
-        if(!is_dir("../{$this->json_folder}/{$this->folder}")){
-            mkdir("../{$this->json_folder}/{$this->folder}", 0777, true);
-        }
         # Tenta salvar os dados, caso dê errado remove-se o arquivo criado (caso tenha sido criado)
         if($file_name = $this->saveToFolder()){
-            if(!$this->saveToDatabase()) {
-                // $this->removeFromFolder($file_name);
+            if($this->saveToDatabase()) {
+                echo 'Dados salvos!';
+            } else {
                 $this->sendMessage(Config::DEFAULT_ERROR_MESSAGE . 'Falha no envio', 500);
             }
         } else {
-            // $this->removeFromFolder($file_name);
             $this->sendMessage(Config::DEFAULT_ERROR_MESSAGE . 'Falha na criação do arquivo', 500);
         }
     }
@@ -43,30 +48,52 @@ class Position extends Mysqli {
 
     # Altera o estado de pronto da imagem no banco, para mostrar as imagens já alteradas e as faltantes
     public function saveToDatabase() {
-        if($query = $this->prepare("UPDATE Images SET done = true WHERE folder = ? and index = ?")){
-            if($query->bind_param('i', $this->folder, $this->index)){
+        if($query = $this->prepare("UPDATE Images SET done_at = ? WHERE id = ?")){
+            if($query->bind_param('si', date('Y-m-d H:i:s'), $this->index)){
                 if($query->execute()){
                     return true;
                 }
             }
         }
+
         return false;
     }
 
     # Salva ou 'atualiza' o json das posições, caso dê errado ele tenta novamente por até 5 vezes
     public function saveToFolder($tries = 0) {
-        if($tries >= 5) return false;
-
-        $file_name = "../{$this->json_folder}/{$this->folder}/{$this->index}.json";
+        $result = false;
+        if($tries >= 5) return false; # 5 tentativas
+        
+        # FULL data
+        if(!is_dir("../{$this->json_folder}/FULL/scene{$this->folder}")){
+            mkdir("../{$this->json_folder}/FULL/scene{$this->folder}", 0777, true);
+        }
+        $file_name = "../{$this->json_folder}/FULL/scene{$this->folder}/frame{$this->index}.json";
         $this->removeFromFolder($file_name);
-
         $position_metadata = fopen($file_name, 'w');
         if(fwrite($position_metadata, json_encode($this->data))){
             if(fclose($position_metadata)){
-                return $file_name;
+                $result = true;
             }
         }
+
+        # RAW data
+        if(!is_dir("../{$this->json_folder}/RAW/scene{$this->folder}")){
+            mkdir("../{$this->json_folder}/RAW/scene{$this->folder}", 0777, true);
+        }
+        $file_name_RAW = "../{$this->json_folder}/RAW/scene{$this->folder}/frame{$this->index}_{$this->volunteer}_{$this->date}.json";
+        $this->removeFromFolder($file_name_RAW);
+        $raw = $this->data['positions'];
+
+        $position_metadata = fopen($file_name_RAW, 'w');
+        if(fwrite($position_metadata, json_encode(array_values($raw)))){
+            $result = $result && fclose($position_metadata);
+        }
         
-        return $this->saveToFolder(++$tries);
+        if($result){
+            return true;
+        } else {
+            return $this->saveToFolder(++$tries);
+        }
     }
 }
