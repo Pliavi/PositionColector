@@ -3,7 +3,7 @@ let axios = require('axios')
 function sendData(positions) { // eslint-disable-line
   var pos = positions
   axios.post('php/savePosition.php', {
-      positions: pos
+    positions: pos
   })
   .then(function (response) {
     console.log(response.data)
@@ -12,5 +12,3 @@ function sendData(positions) { // eslint-disable-line
     console.log(error)
   })
 }
-
-sendData({'lhand': [256,128]});
