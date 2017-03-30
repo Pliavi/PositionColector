@@ -9,9 +9,9 @@ var pump = require('pump');
 
 gulp.task('styl', function (cb) {
   pump([
-        gulp.src('styl/**/*.styl'),
+        gulp.src('assets/styl/**/*.styl'),
         styl(),
-        gulp.dest('dist/css')
+        gulp.dest('dist/assets/css')
     ],
     cb
   );
@@ -29,18 +29,18 @@ gulp.task('pug', function (cb) {
 
 gulp.task('compress', function (cb) {
   pump([
-        gulp.src('js/**/*.js'),
+        gulp.src('assets/js/**/*.js'),
         babel({ presets:['es2015'] }),
         browserify({ insertGlobals : true }),
         uglify(),
-        gulp.dest('dist/js')
+        gulp.dest('dist/assets/js')
     ],
     cb
   );
 });
 
 gulp.task('img', function (cb) {
-  pump([ gulp.src('img/**/*'), gulp.dest('dist/img') ], cb );
+  pump([ gulp.src('assets/img/**/*'), gulp.dest('dist/assets/img') ], cb );
 });
 
 gulp.task('php', function (cb) {
@@ -48,5 +48,5 @@ gulp.task('php', function (cb) {
 });
 
 gulp.task('all', ['compress', 'styl', 'pug', 'img', 'php'])
-gulp.task('watch', () => gulp.watch(['pug/*.pug','js/*.js','styl/*.styl', 'php/*.php'], ['all']))
+gulp.task('watch', () => gulp.watch(['pug/*.pug','assets/**/*', 'php/*.php'], ['all']))
 gulp.task('default', ['watch'])
