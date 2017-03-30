@@ -3,12 +3,13 @@ header
   text-transform: uppercase
   font-size: 40px
 
-.container
+.image-container
   display inline-flex
   background black
   position relative
   left 50%
   transform: translate(-50%, 0%);
+  border 1px solid #57607c
 
 .draggable
   width 1px
@@ -24,11 +25,8 @@ header
   content ''
   background-image url('../img/aim.png')
 
-.jqSimpleConnect
-  z-index 999
-
 span.description
-  position relative
+  position absolute
   top -15px
   left 10px
   color red
@@ -36,3 +34,16 @@ span.description
 
 footer
   text-align: center
+
+.center
+  display block
+  margin auto
+
+.go-button{
+  height initial
+  line-height initial
+  padding 14px 32px
+  font-size 12pt
+  margin 10px auto
+  background-color #26A69A
+}
