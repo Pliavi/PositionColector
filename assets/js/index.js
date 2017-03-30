@@ -6,9 +6,13 @@ var positions = {}
 
 let optionsFactory = {
   limit: dragbound,  
-  setCursor: true,
+  onDragStart: function(el){
+    el.style.cursor = 'none'
+  },
   onDragEnd: function (el, x, y) {
+    el.style.cursor = 'initial'
     positions[el.id] = [x, y]
+    console.log(positions)
   }
 }
 
