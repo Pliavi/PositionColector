@@ -1,31 +1,36 @@
 doctype html
-head
-  link(rel='stylesheet' href='assets/css/main.css')
-  script(src='https://code.jquery.com/jquery-2.2.4.min.js')
+html(lang='pt-br')
+  head
+    meta(charset='utf-8')
+    link(rel='stylesheet', href='https://cdn.jsdelivr.net/siimple/2.0.1/siimple.min.css')
+    link(rel='stylesheet' href='assets/css/main.css')
+    script(src='https://code.jquery.com/jquery-2.2.4.min.js')
+  body
+    header.siimple-h1(style='margin: 0 auto 2px auto') Coletor de Posições
+    
+    button.siimple-btn.siimple-btn--green.go-button.center#done Próximo!
 
-header Coletor de Posições
+    section.container
+      section.image-container
+        img#drag-bound(src="images/scene01/frame01.png" width=800 height=600)
+        #head.draggable
+          span.description Cabeça
+        #neck.draggable
+        #shoulder_left.draggable
+        #shoulder_right.draggable
+        #elbow_left.draggable
+        #elbow_right.draggable
+        #hand_left.draggable
+        #hand_right.draggable
+        #torso.draggable
+        #hip_left.draggable
+        #hip_right.draggable
+        #knee_left.draggable
+        #knee_right.draggable
+        #foot_left.draggable
+        #foot_right.draggable
 
-section.container
-  img#drag-bound(src="#")
-  #head.draggable
-  //- span.description cabeça
-  #neck.draggable
-  
-  #shoulder_left.draggable
-  //- #shoulder_right.draggable
-  //- #elbow_left.draggable
-  //- #elbow_right.draggable
-  //- #hand_left.draggable
-  //- #hand_right.draggable
-  //- #torso.draggable
-  //- #hip_left.draggable
-  //- #hip_right.draggable
-  //- #knee_left.draggable
-  //- #knee_right.draggable
-  //- #foot_left.draggable
-  //- #foot_right.draggable
+      footer.siimple-h6(style="margin: 0") Tente posicionar o ponto o mais próximo do centro da parte do corpo selecionada.
 
-footer Tente posicionar o ponto o mais próximo do centro da parte do corpo selecionada.
-
-script(src='assets/js/index.js')
-script(src='assets/js/sendData.js')
+      script(src='assets/js/index.js')
+      script(src='assets/js/sendData.js')
