@@ -43,10 +43,14 @@ gulp.task('img', function (cb) {
   pump([ gulp.src('assets/img/**/*'), gulp.dest('dist/assets/img') ], cb );
 });
 
+gulp.task('images', function (cb) {
+  pump([ gulp.src('images/**/*'), gulp.dest('dist/images') ], cb );
+});
+
 gulp.task('php', function (cb) {
   pump([ gulp.src('php/**/*'), gulp.dest('dist/php') ], cb );
 });
 
-gulp.task('all', ['compress', 'styl', 'pug', 'img', 'php'])
-gulp.task('watch', () => gulp.watch(['pug/*.pug','assets/**/*', 'php/*.php'], ['all']))
-gulp.task('default', ['watch'])
+gulp.task('all', ['compress', 'styl', 'pug', 'img', 'images', 'php'])
+gulp.task('watch', () => gulp.watch(['pug/*.pug', 'images/**/*','assets/**/*', 'php/*.php'], ['all']))
+gulp.task('default', ['all', 'watch'])
