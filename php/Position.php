@@ -1,4 +1,6 @@
 <?php
+require_once 'Image.php';
+
 class Position extends Mysqli {
 
     protected $json_folder = 'results';
@@ -11,6 +13,7 @@ class Position extends Mysqli {
 
     public function __construct($data) {
         session_start();
+        $image = new Image;
         $_SESSION['id'] = 1;
 
         list($base, $pass, $user, $host ) = Config::DB_LIST;
@@ -28,7 +31,7 @@ class Position extends Mysqli {
         # Tenta salvar os dados, caso dê errado remove-se o arquivo criado (caso tenha sido criado)
         if($file_name = $this->saveToFolder()){
             if($this->saveToDatabase()) {
-                echo 'Dados salvos!';
+                $image->nextImage();
             } else {
                 $this->sendMessage(Config::DEFAULT_ERROR_MESSAGE . 'Falha no envio', 500);
             }

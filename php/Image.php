@@ -20,10 +20,7 @@ class Image extends Mysqli {
                 $query->bind_result($id, $folder, $file_name, $done_at);
                 $query->fetch();
                 echo json_encode([
-                    'id' => $id, 
-                    'folder' => $folder, 
-                    'file_name' => $file_name, 
-                    'done_at' => $done_at
+                    'file_name' => $file_name
                 ]);
             }
         }
