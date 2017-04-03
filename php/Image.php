@@ -22,7 +22,7 @@ class Image extends Mysqli {
             echo json_encode(
                 [
                     'id' => $id,
-                    'image' => Config::JSON_FOLDER . "/{$folder}/{$file_name}"
+                    'image' => Config::IMAGES_FOLDER . "/{$folder}/{$file_name}"
                 ]
             );
         }catch(Exception $e){
