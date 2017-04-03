@@ -17,3 +17,7 @@ function sendData(positions) { // eslint-disable-line no-unused-vars
     setTimeout(() => notification.fadeOut() , 2500)
   })
 }
+
+axios.post('php/getImage.php', { action: 'next' })
+  .then((response) => console.log(response))
+  .catch((error) => console.log(error))

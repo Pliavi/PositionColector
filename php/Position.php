@@ -14,19 +14,19 @@ class Position extends Mysqli {
     public function __construct($data) {
         session_start();
         $image = new Image;
-        $_SESSION['id'] = 1;
 
         list($base, $pass, $user, $host ) = Config::DB_LIST;
         parent::__construct($host, $user, $pass, $base);
         if (mysqli_connect_error()) die(Config::DEFAULT_ERROR_MESSAGE . "Conexão");
 
-        $this->data          = $data;
-        $this->folder        = $data['folder'];
-        $this->index         = $_SESSION['id'];
-        $this->data['index'] = $this->index;
-        $this->data['date']  = date('Y-m-d');
-        $this->date          = $this->data['date'];
-        $this->volunteer     = $this->data['volunteer'];;
+        $this->data              = $data;
+        $this->folder            = $data['folder'];
+        $this->index             = $_SESSION['index'];
+        $this->data['index']     = $this->index;
+        $this->data['date']      = date('Y-m-d');
+        $this->date              = $this->data['date'];
+        $this->data['volunteer'] = $_SESSION['volunteer'];      
+        $this->volunteer         = $this->data['volunteer'];
 
         # Tenta salvar os dados, caso dê errado remove-se o arquivo criado (caso tenha sido criado)
         if($file_name = $this->saveToFolder()){
@@ -51,7 +51,7 @@ class Position extends Mysqli {
 
     # Altera o estado de pronto da imagem no banco, para mostrar as imagens já alteradas e as faltantes
     public function saveToDatabase() {
-        if($query = $this->prepare("UPDATE Images SET done_at = ? WHERE id = ?")){
+        if($query = $this->prepare("UPDATE Images SET done_at = ? WHERE index = ?")){
             if($query->bind_param('si', date('Y-m-d H:i:s'), $this->index)){
                 if($query->execute()){
                     return true;

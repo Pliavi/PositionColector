@@ -1,11 +1,9 @@
 <?php
 require_once('Config.php');
 require_once('Image.php');
-$action = $_GET['action'];
-
+$data = json_decode(file_get_contents('php://input'), true);
+$action = $data['action'];
 $image = new Image;
-
-$_SESSION['id'] = 0;
 
 switch($action){
     case 'next':

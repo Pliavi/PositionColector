@@ -7,22 +7,26 @@ class Image extends Mysqli {
         if (mysqli_connect_error()) die(Config::DEFAULT_ERROR_MESSAGE . "Conexão");
     }
 
-    public function nextImage() { $id = ++$_SESSION['id'] or 1; $this->getImage($id); }
-    public function lastImage() { $id = --$_SESSION['id'] or 1; $this->getImage($id); }
+    public function nextImage() { $this->getImage($_SESSION['index']); $_SESSION['index'] = $_SESSION['index'] + 1; }
+    public function lastImage() { $this->getImage($_SESSION['index']); $_SESSION['index'] = $_SESSION['index'] - 1; }
 
     public function getImage($id) {
-        $sql = "SELECT id, folder, file_name, done_at FROM Images WHERE id = ?";
+        $sql = "SELECT `id`, `folder`, `file_name`, `index` , `done_at` FROM Images WHERE `index` = ?";
 
-        $query = $this->prepare($sql);
-        if(!is_null($id)){
-            $query->bind_param('i', $id) ;
-            if($query->execute()){
-                $query->bind_result($id, $folder, $file_name, $done_at);
-                $query->fetch();
-                echo json_encode([
-                    'file_name' => $file_name
-                ]);
-            }
+        try{
+            $query = $this->prepare($sql);
+            $query->bind_param('i', $id);
+            $query->execute();
+            $query->bind_result($id, $folder, $file_name, $index, $done_at);
+            $query->fetch();
+            echo json_encode(
+                [
+                    'id' => $id,
+                    'image' => Config::JSON_FOLDER . "/{$folder}/{$file_name}"
+                ]
+            );
+        }catch(Exception $e){
+            echo $e;
         }
     }
 }

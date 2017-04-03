@@ -1,52 +1,9 @@
-doctype html
-html(lang='pt-br')
-  head
-    meta(charset='utf-8')
-    link(rel='stylesheet', href='https://cdn.jsdelivr.net/siimple/2.0.1/siimple.min.css')
-    link(rel='stylesheet' href='assets/css/main.css')
-    script(src='https://code.jquery.com/jquery-2.2.4.min.js')
-  body
-    #notification
+include includes/head.pug
+header.siimple-h1(style='margin: 0 auto 2px auto') Coletor de Posições
 
-    header.siimple-h1(style='margin: 0 auto 2px auto') Coletor de Posições
-    
-    button.siimple-btn.siimple-btn--green.go-button.center#done Próximo!
-
-    section.container
-      section.image-container
-        img#drag-bound(src="images/scene01/frame01.png" width=800 height=600)
-        #head.draggable
-          span.description Cabeça
-        #neck.draggable
-          span.description Pescoço
-        #shoulder_left.draggable
-          span.description Ombro Esquerdo
-        #shoulder_right.draggable
-          span.description Ombro Direito
-        #elbow_left.draggable
-          span.description Cotovelo Esquerdo
-        #elbow_right.draggable
-          span.description Cotovelo Direito
-        #hand_left.draggable
-          span.description Mão Esquerda
-        #hand_right.draggable
-          span.description Mão Direita
-        #torso.draggable
-          span.description Tronco
-        #hip_left.draggable
-          span.description 
-        #hip_right.draggable
-          span.description 
-        #knee_left.draggable
-          span.description Joelho Esquerdo
-        #knee_right.draggable
-          span.description Joelho Direito
-        #foot_left.draggable
-          span.description Pé Esquerdo
-        #foot_right.draggable
-          span.description Pé Direito
-
-      footer.siimple-h6(style="margin: 0") Tente posicionar o ponto o mais próximo do centro da parte do corpo selecionada.
-
-      script(src='assets/js/index.js')
-      script(src='assets/js/ajax.js')
+form.siimple-h6(action='php/login.php' method='post' style='text-align: center')
+  | Olá, eu me chamo 
+  input.siimple-input(type='text' placeholder='Fulano da Silva' name='volunteer' autofocus)
+  | !
+  br
+  button.siimple-btn.siimple-btn--green.go-button.center#done Começar!
