@@ -8,6 +8,9 @@ class Config {
     const DB_PASS = '';
     const DB_BASE = 'PositionColector';
     const DB_LIST = [ self::DB_BASE, self::DB_PASS, self::DB_USER, self::DB_HOST ];
+
+    const JSON_FOLDER = 'results';
+    const IMAGES_FOLDER = 'images';
 }
 
 session_start();
