@@ -19,5 +19,5 @@ function sendData(positions) { // eslint-disable-line no-unused-vars
 }
 
 axios.post('php/getImage.php', { action: 'next' })
-  .then((response) => console.log(response))
+  .then((response) => document.getElementById('drag-bound').src = response.data.image)
   .catch((error) => console.log(error))
