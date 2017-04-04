@@ -9,4 +9,9 @@ switch($action){
     case 'next':
         $image->nextImage();
         break;
+    case 'last':
+        $image->lastImage();
+    case 'actual':
+        $image->getImage();
+        break;
 }
