@@ -7,10 +7,12 @@ class Image extends Mysqli {
         if (mysqli_connect_error()) die(Config::DEFAULT_ERROR_MESSAGE . "Conexão");
     }
 
-    public function nextImage() { $this->getImage($_SESSION['index']); $_SESSION['index'] = $_SESSION['index'] + 1; }
-    public function lastImage() { $this->getImage($_SESSION['index']); $_SESSION['index'] = $_SESSION['index'] - 1; }
+    public function nextImage() { $_SESSION['index'] = $_SESSION['index'] + 1; $this->getImage(); }
+    public function lastImage() { $_SESSION['index'] = $_SESSION['index'] - 1; $this->getImage(); }
 
-    public function getImage($id) {
+    public function getImage() {
+        $id = $_SESSION['index'];
+
         $sql = "SELECT `id`, `folder`, `file_name`, `index` , `done_at` FROM Images WHERE `index` = ?";
 
         try{
