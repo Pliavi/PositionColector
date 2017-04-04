@@ -1,23 +1,32 @@
-let axios = require('axios')
+let Axios = require('axios')
 
-function sendData(positions) { // eslint-disable-line no-unused-vars
-  var pos = positions
-  axios.post('php/savePosition.php', {
-    positions: pos
-  })
-  .then(function (response) {
-    let image = document.getElementById('#drag-bound')
-    image.src = response.file_name
-  })
-  .catch(function (error) {
-    let notification = $('#notification')
-    notification.text(error)
-    
-    notification.fadeIn()
-    setTimeout(() => notification.fadeOut() , 2500)
-  })
+module.exports = {
+  sendData: function(positions) {
+    if(Object.keys(positions).length >= 15){
+      Axios.post('php/savePosition.phpa', {
+        positions: positions
+      })
+      .then(function (response) {   
+        let image = document.getElementById('drag-bound')
+        image.src = response.data.file_name
+      })
+      .catch(function (error) {
+        let notification = document.getElementById('notification')
+        console.log(error)
+        notification.innerHTML = error
+        notification.style.display = 'block'
+        setTimeout(() => notification.style.display = 'none' , 2500)
+      })
+    } else {
+      console.log('é necessário mover todos os pontos!');
+    }
+  },
+
+  getActual: function() {
+    Axios.post('php/getImage.php', { action: 'actual' })
+      .then((response) => {
+        document.getElementById('drag-bound').src = response.data.image
+      })
+      .catch((error) => console.log(error))
+  }
 }
-
-axios.post('php/getImage.php', { action: 'next' })
-  .then((response) => document.getElementById('drag-bound').src = response.data.image)
-  .catch((error) => console.log(error))
