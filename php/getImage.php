@@ -11,6 +11,7 @@ switch($action){
         break;
     case 'last':
         $image->lastImage();
+        break;
     case 'actual':
         $image->getImage();
         break;

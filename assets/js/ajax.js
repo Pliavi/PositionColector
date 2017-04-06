@@ -1,32 +1,37 @@
+var Store = require('./store')
 let Axios = require('axios')
 
-module.exports = {
-  sendData: function(positions) {
-    if(Object.keys(positions).length >= 15){
-      Axios.post('php/savePosition.phpa', {
-        positions: positions
-      })
-      .then(function (response) {   
-        let image = document.getElementById('drag-bound')
-        image.src = response.data.file_name
-      })
-      .catch(function (error) {
-        let notification = document.getElementById('notification')
-        console.log(error)
-        notification.innerHTML = error
-        notification.style.display = 'block'
-        setTimeout(() => notification.style.display = 'none' , 2500)
-      })
-    } else {
-      console.log('é necessário mover todos os pontos!');
-    }
+var _this = module.exports = {
+  sendData: function(positions, action) {
+    Axios.post('php/savePosition.php', {
+      positions: positions
+    })
+    .then(function (response) {
+      _this.getImage(action)
+    })
+    .catch(function (error) {
+      let notification = document.getElementById('notification')
+      notification.innerHTML = error.response.data
+      notification.style.display = 'block'
+      setTimeout(() => notification.style.display = 'none' , 4000)
+    })
   },
 
-  getActual: function() {
-    Axios.post('php/getImage.php', { action: 'actual' })
-      .then((response) => {
-        document.getElementById('drag-bound').src = response.data.image
+  getImage: function(action) {
+    Axios.post('php/getImage.php', { action: action })
+      .then((image) => {
+        console.log(image)
+        document.getElementById('drag-bound').src = image.data.image
       })
-      .catch((error) => console.log(error))
+      .catch((error) => {
+        let notification = document.getElementById('notification')
+        notification.innerHTML = error.response.data
+        notification.style.display = 'block'
+        setTimeout(() => notification.style.display = 'none' , 4000)
+      })
+  },
+
+  setPosition: function() {
+    Store.positions = {}
   }
 }
