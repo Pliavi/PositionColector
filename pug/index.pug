@@ -4,8 +4,10 @@ header.siimple-h1(style='margin: 0 auto 2px auto') Coletor de Posições
 form.siimple-h6(action='php/login.php' method='post' style='text-align: center')
   | Olá, eu me chamo 
   input.siimple-input(type='text' placeholder='Fulano da Silva' name='volunteer' autofocus)
-  input.siimple-input(type='number' name='folder' required)
   | !
   br
-div(style='text-align: center')
-  button.siimple-btn.siimple-btn--green.go-button#done(type='submit') Começar!
+  | Informe o número fornecido: 
+  input.siimple-input(type='number' name='folder' required)
+  br
+  div(style='text-align: center')
+    button.siimple-btn.siimple-btn--green.go-button#done(type='submit') Começar!
